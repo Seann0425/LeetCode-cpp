@@ -43,3 +43,25 @@ public:
 };
 
 /*the solution should start from below*/
+
+class Solution {
+public:
+    map<int, Node *> m;
+    Node *cloneGraph(Node *node) {
+        if (!node) return nullptr;
+        Node *n = new Node;
+        n->val = node->val;
+        m[n->val] = n;
+        vector<Node *> v;
+        for (const auto &x : node->neighbors) {
+            if (!m.count(x->val)) {
+                v.push_back(cloneGraph(x));
+                m[x->val] = v.back();
+            } else {
+                v.push_back(m[x->val]);
+            }
+        }
+        n->neighbors = v;
+        return n;
+    }
+};

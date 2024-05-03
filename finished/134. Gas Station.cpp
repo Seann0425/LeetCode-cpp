@@ -43,3 +43,31 @@ public:
 };
 
 /*the solution should start from below*/
+
+class Solution {
+public:
+    int canCompleteCircuit(vector<int> &gas, vector<int> &cost) {
+        const int sz = gas.size();
+        vector<bool> attempted(sz);
+        vector<int> exchange(sz);
+        for (int i = 0; i < sz; i++) {
+            exchange[i] = gas[i] - cost[i];
+            attempted[i] = (exchange[i] < 0);
+        }
+        for (int i = 0; i < sz; i++) {
+            if (attempted[i]) continue;
+            vector<bool> visited(attempted.begin(), attempted.end());
+            int ownedGas = exchange[i], idx = i;
+            while (((++idx) % sz) != i) {
+                ownedGas += exchange[idx % sz];
+                if (ownedGas < 0) {
+                    attempted = visited;
+                    break;
+                }
+                visited[idx % sz] = true;
+            }
+            if (ownedGas >= 0) return i;
+        }
+        return -1;
+    }
+};
