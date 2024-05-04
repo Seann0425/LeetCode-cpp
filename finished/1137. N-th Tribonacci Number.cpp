@@ -44,24 +44,22 @@ public:
 
 /*the solution should start from below*/
 
+const size_t N = 1 + 37;
+
+constexpr array<int, N> ans = []() consteval {
+    array<int, N> tmp;
+    tmp[0] = 0;
+    tmp[1] = 1;
+    tmp[2] = 1;
+    for (size_t i = 3; i < N; i++) {
+        tmp[i] = tmp[i - 1] + tmp[i - 2] + tmp[i - 3];
+    }
+    return tmp;
+}();
+
 class Solution {
 public:
-    int numRescueBoats(vector<int> &people, int limit) {
-        int cntr = 0;
-        const auto N = people.size();
-        sort(people.begin(), people.end(), greater<>());
-        vector<bool> carried(N);
-        size_t i, j;
-        for (i = 0; i < N; i++) {
-            if (carried[i]) continue;
-            carried[i] = true;
-            while (j > i && people[i] + people[j] <= limit)
-                j--;
-            while (j <= i || carried[j] || people[i] + people[j] > limit)
-                j++;
-            if (j < N) carried[j] = true;
-            cntr++;
-        }
-        return cntr;
+    int tribonacci(int n) {
+        return ans[n];
     }
 };
