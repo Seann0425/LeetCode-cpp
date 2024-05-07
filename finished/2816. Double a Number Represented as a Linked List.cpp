@@ -1,0 +1,67 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {
+    }
+    ListNode(int x) : val(x), next(nullptr) {
+    }
+    ListNode(int x, ListNode *next) : val(x), next(next) {
+    }
+};
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {
+    }
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {
+    }
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {
+    }
+};
+
+class Node {
+public:
+    int val;
+    vector<Node *> neighbors;
+    Node() {
+        val = 0;
+        neighbors = vector<Node *>();
+    }
+    Node(int _val) {
+        val = _val;
+        neighbors = vector<Node *>();
+    }
+    Node(int _val, vector<Node *> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+};
+
+/*the solution should start from below*/
+
+class Solution {
+public:
+    ListNode *doubleIt(ListNode *head) {
+        stack<ListNode *> stk;
+        ListNode *cur = head;
+        while (cur) {
+            stk.push(cur);
+            cur = cur->next;
+        }
+        int carry = 0;
+        while (!stk.empty()) {
+            cur = stk.top();
+            stk.pop();
+            int val = cur->val * 2 + carry;
+            cur->val = val % 10;
+            carry = val / 10;
+        }
+        if (carry > 0) return new ListNode(carry, head);
+        return head;
+    }
+};
