@@ -51,3 +51,33 @@ public:
 //     cout.tie(0);
 //     return 0;
 // }();
+
+class Solution {
+public:
+    int myAtoi(string s) {
+        bool sign = false, number = false;
+        uint32_t ans = 0;
+        for (const auto &ch : s) {
+            if (number && !isdigit(ch) || ans == -1) break;
+            if (!number) {
+                switch (ch) {
+                case ' ':
+                    continue;
+                case '-':
+                    sign = true;
+                    number = true;
+                    break;
+                default:
+                    if (isdigit(ch)) {
+                        ans = (ch - '0');
+                        number = true;
+                    } else ans = -1;
+                    break;
+                }
+            } else ans = ans * 10 + (ch - '0');
+            if (ans > INT_MAX && !sign) return INT_MAX;
+            if (ans > static_cast<unsigned>(INT_MAX) + 1 && sign) return INT_MIN;
+        }
+        return sign ? -1 * max(0U, ans) : max(0U, ans);
+    }
+};

@@ -44,33 +44,31 @@ public:
 
 /*the solution should start from below*/
 
+// #pragma GCC optimize("O3", "unroll-loops")
+// static const auto __ = [](){
+//     ios_base::sync_with_stdio(false);
+//     cin.tie(0);
+//     cout.tie(0);
+//     return 0;
+// }();
+
+typedef pair<int, int> PrimeFraction;
 class Solution {
-public:
-    long long maximumHappinessSum(vector<int> &happiness, int k) {
-        sort(happiness.begin(), happiness.end(), greater<>());
-        long long ans = 0;
-        for (int i = 0; i < k; i++) {
-            ans += max(0, happiness[i] - i);
+    struct comparePrimeFraction {
+        bool operator()(PrimeFraction a, PrimeFraction b) {
+            return a.first * b.second < b.first * a.second;
         }
-        return ans;
+    };
+public:
+    vector<int> kthSmallestPrimeFraction(vector<int> &arr, int k) {
+        priority_queue<PrimeFraction, vector<PrimeFraction>, comparePrimeFraction> heap;
+        const auto N = arr.size();
+        for (size_t i = 0; i < N; i++) {
+            for (size_t j = i + 1; j < N; j++) {
+                heap.emplace(arr[i], arr[j]);
+                if (heap.size() > k) heap.pop();
+            }
+        }
+        return {heap.top().first, heap.top().second};
     }
 };
-
-//////////////////////////////////////////////////////////////
-
-// class Solution {
-// public:
-//     long long maximumHappinessSum(vector<int> &happiness, int k) {
-//         priority_queue<long long, vector<long long>> children;
-//         long long soHappy = 0;
-//         for (const auto &h : happiness)
-//             children.push(static_cast<long long>(h));
-//         for (int i = 0; i < k; i++) {
-//             // i means how many children have already been selected
-//             long long happy = children.top() - static_cast<long long>(i);
-//             soHappy += (happy < 0 ? 0 : happy);
-//             children.pop();
-//         }
-//         return soHappy;
-//     }
-// };

@@ -44,6 +44,15 @@ public:
 
 /*the solution should start from below*/
 
+#pragma GCC optimize("O3", "unroll-loops")
+
+static const int __ = []() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    return 0;
+}();
+
 class Solution {
 public:
     ListNode *doubleIt(ListNode *head) {
@@ -57,9 +66,9 @@ public:
         while (!stk.empty()) {
             cur = stk.top();
             stk.pop();
-            int val = cur->val * 2 + carry;
-            cur->val = val % 10;
-            carry = val / 10;
+            cur->val = cur->val * 2 + carry;
+            carry = cur->val / 10;
+            cur->val %= 10;
         }
         if (carry > 0) return new ListNode(carry, head);
         return head;

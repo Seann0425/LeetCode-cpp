@@ -47,33 +47,30 @@ public:
 class Solution {
 public:
     vector<string> findRelativeRanks(vector<int> &score) {
-        map<int, int> sortMap;
-        int n = score.size();
-        int counter = 3;
-        int ranking = 1;
-        vector<string> rank(n);
-        for (int i = 0; i < n; i++)
-            sortMap[score[i]] = i;
-        for (auto itr = sortMap.rbegin(); itr != sortMap.rend(); itr++, ranking++) {
-            if (counter) {
-                switch (counter) {
-                case 3:
-                    rank[itr->second] = "Gold Medal";
-                    counter--;
-                    break;
-                case 2:
-                    rank[itr->second] = "Silver Medal";
-                    counter--;
-                    break;
-                default:
-                    rank[itr->second] = "Bronze Medal";
-                    counter--;
-                    break;
-                }
-                continue;
-            }
-            rank[itr->second] = to_string(ranking);
+        const auto N = score.size();
+        vector<pair<int, size_t>> rank;
+        for (size_t i = 0; i < N; i++) {
+            rank.emplace_back(score[i], i);
         }
-        return rank;
+        sort(rank.begin(), rank.end(), greater<>());
+        vector<string> ans(score.size());
+        for (size_t i = 0; i < N; i++) {
+            size_t id = rank[i].second;
+            switch (i) {
+            case 0:
+                ans[id] = "Gold Medal"s;
+                break;
+            case 1:
+                ans[id] = "Silver Medal"s;
+                break;
+            case 2:
+                ans[id] = "Bronze Medal"s;
+                break;
+            default:
+                ans[id] = to_string(i + 1);
+                break;
+            }
+        }
+        return ans;
     }
 };

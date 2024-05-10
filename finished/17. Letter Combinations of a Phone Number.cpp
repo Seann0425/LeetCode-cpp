@@ -45,32 +45,23 @@ public:
 /*the solution should start from below*/
 
 class Solution {
-public:
-    long long maximumHappinessSum(vector<int> &happiness, int k) {
-        sort(happiness.begin(), happiness.end(), greater<>());
-        long long ans = 0;
-        for (int i = 0; i < k; i++) {
-            ans += max(0, happiness[i] - i);
+    const array<string, 8> letters{"abc"s, "def"s, "ghi"s, "jkl"s, "mno"s, "pqrs"s, "tuv"s, "wxyz"s};
+    vector<string> ans;
+    void backtracking(string combination, string next_letters) {
+        if (next_letters.size() == 0) {
+            ans.push_back(combination);
+            return;
         }
+        for (const auto &letter : letters[static_cast<size_t>(next_letters.front() - '2')]) {
+            if (next_letters.size() > 1) backtracking(combination + letter, next_letters.substr(1, next_letters.size() - 1));
+            else backtracking(combination + letter, ""s);
+        }
+    }
+public:
+    vector<string> letterCombinations(string digits) {
+        if (digits.empty()) return {};
+        ans = {};
+        backtracking(""s, digits);
         return ans;
     }
 };
-
-//////////////////////////////////////////////////////////////
-
-// class Solution {
-// public:
-//     long long maximumHappinessSum(vector<int> &happiness, int k) {
-//         priority_queue<long long, vector<long long>> children;
-//         long long soHappy = 0;
-//         for (const auto &h : happiness)
-//             children.push(static_cast<long long>(h));
-//         for (int i = 0; i < k; i++) {
-//             // i means how many children have already been selected
-//             long long happy = children.top() - static_cast<long long>(i);
-//             soHappy += (happy < 0 ? 0 : happy);
-//             children.pop();
-//         }
-//         return soHappy;
-//     }
-// };
