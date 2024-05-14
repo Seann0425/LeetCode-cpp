@@ -54,30 +54,15 @@ public:
 
 class Solution {
 public:
-    int myAtoi(string s) {
-        bool sign = false, number = false;
-        uint32_t ans = 0;
-        for (const auto &ch : s) {
-            if (number && !isdigit(ch) || ans == -1) break;
-            if (!number) {
-                switch (ch) {
-                case ' ':
-                    continue;
-                case '-':
-                    sign = true;
-                    number = true;
-                    break;
-                default:
-                    if (isdigit(ch)) {
-                        ans = (ch - '0');
-                        number = true;
-                    } else ans = -1;
-                    break;
-                }
-            } else ans = ans * 10 + (ch - '0');
-            if (ans > INT_MAX && !sign) return INT_MAX;
-            if (ans > static_cast<unsigned>(INT_MAX) + 1 && sign) return INT_MIN;
+    bool satisfiesConditions(vector<vector<int>> &grid) {
+        const auto M = grid.size();
+        const auto N = grid.front().size();
+        for (size_t i = 0; i < M; i++) {
+            for (size_t j = 0; j < N; j++) {
+                if (i < M - 1 && grid[i + 1][j] != grid[i][j]) return false;
+                if (j < N - 1 && grid[i][j + 1] == grid[i][j]) return false;
+            }
         }
-        return sign ? -1 * max(0U, ans) : max(0U, ans);
+        return true;
     }
 };
