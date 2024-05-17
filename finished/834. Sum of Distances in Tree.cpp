@@ -43,47 +43,52 @@ public:
 };
 
 /*the solution should start from below*/
+// #pragma GCC optimize("O3", "unroll-loops")
+// static const auto __ = [](){
+//     ios_base::sync_with_stdio(false);
+//     cin.tie(0);
+//     cout.tie(0);
+//     return 0;
+// }();
 
 class Solution {
-private:
-    unordered_map<int, vector<int>> graph;
-    vector<int> count;
-    vector<int> res;
-
-    void dfs(int node, int parent) {
-        for (int child : graph[node]) {
-            if (child != parent) {
-                dfs(child, node);
-                count[node] += count[child];
-                res[node] += res[child] + count[child];
+    vector<int> height, descendent, ans;
+    vector<vector<size_t>> adj_list;
+    int dfs(size_t node) {
+        int descendent_count = 1; // include the node itself
+        for (const auto &adj : adj_list[node]) {
+            if (height[adj] == -1) {
+                height[adj] = height[node] + 1;
+                ans[adj] = ans[node] + static_cast<int>(adj_list.size()) - 2 * descendent[adj];
+                descendent_count += dfs(adj);
             }
         }
-    }
-
-    void dfs2(int node, int parent) {
-        for (int child : graph[node]) {
-            if (child != parent) {
-                res[child] = res[node] - count[child] + (count.size() - count[child]);
-                dfs2(child, node);
-            }
-        }
+        descendent[node] = descendent_count;
+        return descendent_count;
     }
 public:
     vector<int> sumOfDistancesInTree(int n, vector<vector<int>> &edges) {
-        graph.clear();
-        count = vector<int>(n, 1);
-        res = vector<int>(n, 0);
-
-        for (auto &edge : edges) {
-            int u = edge[0];
-            int v = edge[1];
-            graph[u].push_back(v);
-            graph[v].push_back(u);
+        const auto N = edges.size() + 1;
+        height.resize(N, -1);
+        descendent.resize(N);
+        ans.resize(N, 0);
+        adj_list.resize(N);
+        for (const auto &edge : edges) {
+            adj_list[edge[0]].push_back(edge[1]);
+            adj_list[edge[1]].push_back(edge[0]);
         }
 
-        dfs(0, -1);
-        dfs2(0, -1);
+        // initial step for ans
+        // build descendent
+        height[0] = 0;
+        dfs(0);
+        ans[0] = accumulate(height.begin(), height.end(), 0);
+        fill(height.begin(), height.end(), -1);
 
-        return res;
+        // dp
+        height[0] = 0;
+        dfs(0);
+
+        return ans;
     }
 };

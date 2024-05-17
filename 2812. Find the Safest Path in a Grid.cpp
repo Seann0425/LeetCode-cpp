@@ -51,3 +51,9 @@ public:
 //     cout.tie(0);
 //     return 0;
 // }();
+
+class Solution {
+public:
+    int maximumSafenessFactor(vector<vector<int>> &grid) {
+    }
+};

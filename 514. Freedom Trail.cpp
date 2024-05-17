@@ -44,10 +44,13 @@ public:
 
 /*the solution should start from below*/
 
-// #pragma GCC optimize("O3", "unroll-loops")
-// static const auto InitialOptimization = [](){
-//     ios_base::sync_with_stdio(false);
-//     cin.tie(0);
-//     cout.tie(0);
-//     return 0;
-// }();
+class Solution {
+public:
+    int findRotateSteps(string ring, string key) {
+        // TODO: build a chart that knows the shortest distance from a certain charcter to another
+        // but how?
+
+        // TODO: sum the distances based on the chart
+        // if the front of key is not the first character of ring, push it to the front of key
+    }
+};

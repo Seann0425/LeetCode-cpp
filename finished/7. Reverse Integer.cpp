@@ -45,9 +45,27 @@ public:
 /*the solution should start from below*/
 
 // #pragma GCC optimize("O3", "unroll-loops")
-// static const auto InitialOptimization = [](){
+// static const auto __ = [](){
 //     ios_base::sync_with_stdio(false);
 //     cin.tie(0);
 //     cout.tie(0);
 //     return 0;
 // }();
+
+class Solution {
+public:
+    int reverse(int x) {
+        if (x == INT_MIN) return 0;
+        bool sign = (x < 0);
+        x = abs(x);
+        int ans = 0;
+        while (x > 0) {
+            auto digit = x % 10;
+            x /= 10;
+            // ans can't be INT_MIN, since x will overflow at first place
+            if (ans > INT_MAX / 10 || (ans *= 10) > INT_MAX - digit) return 0;
+            ans += digit;
+        }
+        return sign ? -ans : ans;
+    }
+};

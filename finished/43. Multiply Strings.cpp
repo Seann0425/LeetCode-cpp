@@ -45,9 +45,35 @@ public:
 /*the solution should start from below*/
 
 // #pragma GCC optimize("O3", "unroll-loops")
-// static const auto InitialOptimization = [](){
+// static const auto __ = [](){
 //     ios_base::sync_with_stdio(false);
 //     cin.tie(0);
 //     cout.tie(0);
 //     return 0;
 // }();
+
+class Solution {
+public:
+    string multiply(string num1, string num2) {
+        const auto M = num1.size();
+        const auto N = num2.size();
+        string ans;
+        ans.resize(M + N, '0');
+        for (size_t j = N - 1; j < N; j--) {
+            int carry = 0;
+            for (size_t i = M - 1; i < M; i--) {
+                auto tmp = (num1[i] - '0') * (num2[j] - '0') + carry;
+                size_t target = i + j + 1;
+                auto origin = ans[target] - '0';
+                origin += tmp;
+                carry = origin / 10;
+                origin %= 10;
+                ans[target] = ('0' + origin);
+            }
+            if (carry) ans[j] = carry + '0';
+        }
+        while (ans.size() > 1 && ans.front() == '0')
+            ans.erase(ans.begin());
+        return ans;
+    }
+};

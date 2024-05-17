@@ -51,3 +51,17 @@ public:
 //     cout.tie(0);
 //     return 0;
 // }();
+
+class Solution {
+    void trim(TreeNode *&root, int target) {
+        if (!root) return;
+        trim(root->left, target);
+        trim(root->right, target);
+        if (root->val == target && !root->left && !root->right) root = nullptr;
+    }
+public:
+    TreeNode *removeLeafNodes(TreeNode *root, int target) {
+        trim(root, target);
+        return root;
+    }
+};

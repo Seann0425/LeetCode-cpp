@@ -43,9 +43,8 @@ public:
 };
 
 /*the solution should start from below*/
-
 // #pragma GCC optimize("O3", "unroll-loops")
-// static const auto __ = [](){
+// static const auto _ = [](){
 //     ios_base::sync_with_stdio(false);
 //     cin.tie(0);
 //     cout.tie(0);
