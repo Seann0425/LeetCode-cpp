@@ -44,28 +44,55 @@ public:
 
 /*the solution should start from below*/
 
+// #pragma GCC optimize("O3", "unroll-loops")
+// static const auto InitialOptimization = [](){
+//     ios_base::sync_with_stdio(false);
+//     cin.tie(0);
+//     cout.tie(0);
+//     return 0;
+// }();
+
 class Solution {
 public:
     vector<int> relativeSortArray(vector<int> &arr1, vector<int> &arr2) {
-        ios_base::sync_with_stdio(0);
-        cin.tie(0);
-        cout.tie(0);
-        map<int, int> countingSort;
-        vector<int> result;
-        for (int n : arr1)
-            countingSort[n]++;
-        for (int ele : arr2) {
-            while (countingSort[ele]) {
-                countingSort[ele]--;
-                result.push_back(ele);
-            }
+        map<int, int> cntr;
+        size_t idx = 0;
+        for (const auto &i : arr1)
+            cntr[i]++;
+        for (const auto &i : arr2) {
+            while (cntr[i]--)
+                arr1[idx++] = i;
         }
-        for (auto itr = countingSort.begin(); itr != countingSort.end(); itr++) {
-            while (itr->second) {
-                itr->second--;
-                result.push_back(itr->first);
-            }
+        for (auto &ele : cntr) {
+            while (ele.second--)
+                arr1[idx++] = ele.first;
         }
-        return result;
+        return arr1;
     }
 };
+
+// class Solution {
+// public:
+//     vector<int> relativeSortArray(vector<int> &arr1, vector<int> &arr2) {
+//         ios_base::sync_with_stdio(0);
+//         cin.tie(0);
+//         cout.tie(0);
+//         map<int, int> countingSort;
+//         vector<int> result;
+//         for (int n : arr1)
+//             countingSort[n]++;
+//         for (int ele : arr2) {
+//             while (countingSort[ele]) {
+//                 countingSort[ele]--;
+//                 result.push_back(ele);
+//             }
+//         }
+//         for (auto itr = countingSort.begin(); itr != countingSort.end(); itr++) {
+//             while (itr->second) {
+//                 itr->second--;
+//                 result.push_back(itr->first);
+//             }
+//         }
+//         return result;
+//     }
+// };
