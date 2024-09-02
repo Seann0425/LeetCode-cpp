@@ -44,29 +44,29 @@ public:
 
 /*the solution should start from below*/
 
+// #pragma GCC optimize("O3", "unroll-loops")
+// static const auto InitialOptimization = [](){
+//     ios_base::sync_with_stdio(false);
+//     cin.tie(0);
+//     cout.tie(0);
+//     return 0;
+// }();
+
 class Solution {
 public:
-    int minOperations(vector<string>& logs) {
-        int level = 0;
-        for (const auto &log : logs) {
-            if (log == "./"s) continue;
-            if (log == "../"s) level = max(level - 1, 0);
-            else level++;
+    bool checkSubarraySum(vector<int>& nums, int k) {
+        unordered_map<int, int> mod;
+        mod[0] = 1;
+        const auto N = nums.size();
+
+        nums[0] %= k;
+        mod[nums[0]]++;
+        for (size_t i = 1; i < N; i++) {
+            nums[i] %= k;
+            nums[i] = (nums[i - 1] + nums[i]) % k;
+            if (mod[nums[i]] - (nums[i - 1] == nums[i])) return true;
+            mod[nums[i]]++;
         }
-        return level;
+        return false;
     }
 };
-
-// class Solution {
-// public:
-//     int minOperations(vector<string> &logs) {
-//         int lvl = 0;
-//         for (string s : logs) {
-//             if (s[0] == '.') {
-//                 if (s[1] == '.' && lvl > 0) lvl--;
-//                 else continue;
-//             } else lvl++;
-//         }
-//         return lvl;
-//     }
-// };

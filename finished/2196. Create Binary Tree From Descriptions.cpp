@@ -44,29 +44,31 @@ public:
 
 /*the solution should start from below*/
 
+// #pragma GCC optimize("O3", "unroll-loops")
+// static const auto InitialOptimization = [](){
+//     ios_base::sync_with_stdio(false);
+//     cin.tie(0);
+//     cout.tie(0);
+//     return 0;
+// }();
+
 class Solution {
 public:
-    int minOperations(vector<string>& logs) {
-        int level = 0;
-        for (const auto &log : logs) {
-            if (log == "./"s) continue;
-            if (log == "../"s) level = max(level - 1, 0);
-            else level++;
+    TreeNode* createBinaryTree(vector<vector<int>>& descriptions) {
+        unordered_map<int, TreeNode*> mapping;
+        unordered_map<int, bool> is_child;
+        for (const auto &description : descriptions) {
+            auto &parent = description[0], &child = description[1], &isLeft = description[2];
+            if (!mapping.count(parent)) mapping[parent] = new TreeNode(parent);
+            if (!mapping.count(child)) mapping[child] = new TreeNode(child);
+            if (isLeft) mapping[parent]->left = mapping[child];
+            else mapping[parent]->right = mapping[child];
+
+            is_child[child] = is_child[parent] | true;
         }
-        return level;
+        
+        for (const auto &[node, truth] : is_child)
+            if (!truth) return mapping[node];
+        return nullptr;
     }
 };
-
-// class Solution {
-// public:
-//     int minOperations(vector<string> &logs) {
-//         int lvl = 0;
-//         for (string s : logs) {
-//             if (s[0] == '.') {
-//                 if (s[1] == '.' && lvl > 0) lvl--;
-//                 else continue;
-//             } else lvl++;
-//         }
-//         return lvl;
-//     }
-// };

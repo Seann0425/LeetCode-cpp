@@ -44,29 +44,26 @@ public:
 
 /*the solution should start from below*/
 
+// #pragma GCC optimize("O3", "unroll-loops")
+// static const auto InitialOptimization = [](){
+//     ios_base::sync_with_stdio(false);
+//     cin.tie(0);
+//     cout.tie(0);
+//     return 0;
+// }();
+
 class Solution {
 public:
-    int minOperations(vector<string>& logs) {
-        int level = 0;
-        for (const auto &log : logs) {
-            if (log == "./"s) continue;
-            if (log == "../"s) level = max(level - 1, 0);
-            else level++;
-        }
-        return level;
+    int chalkReplacer(vector<int>& chalk, int k) {
+        long long chalks = accumulate(chalk.begin(), chalk.end(), 0LL);
+        k %= chalks;
+        const auto n = chalk.size();
+        while (k > 0) {
+            for (size_t i = 0; i < n; i++) {
+                if (k < chalk[i]) return i;
+                k -= chalk[i];
+            }
+        }      
+        return 0;
     }
 };
-
-// class Solution {
-// public:
-//     int minOperations(vector<string> &logs) {
-//         int lvl = 0;
-//         for (string s : logs) {
-//             if (s[0] == '.') {
-//                 if (s[1] == '.' && lvl > 0) lvl--;
-//                 else continue;
-//             } else lvl++;
-//         }
-//         return lvl;
-//     }
-// };

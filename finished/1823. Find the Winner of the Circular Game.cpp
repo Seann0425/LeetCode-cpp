@@ -44,29 +44,25 @@ public:
 
 /*the solution should start from below*/
 
+// #pragma GCC optimize("O3", "unroll-loops")
+// static const auto InitialOptimization = [](){
+//     ios_base::sync_with_stdio(false);
+//     cin.tie(0);
+//     cout.tie(0);
+//     return 0;
+// }();
+
 class Solution {
+    int eliminate(int size, int k, vector<int>& friends, int pos) {
+        if (friends.size() == 1) return friends.front();
+        pos = (pos + k - 1) % size;
+        friends.erase(friends.begin() + pos);
+        return eliminate(size - 1, k, friends, pos);
+    }
 public:
-    int minOperations(vector<string>& logs) {
-        int level = 0;
-        for (const auto &log : logs) {
-            if (log == "./"s) continue;
-            if (log == "../"s) level = max(level - 1, 0);
-            else level++;
-        }
-        return level;
+    int findTheWinner(int n, int k) {
+        vector<int> friends(n);
+        iota(friends.begin(), friends.end(), 1);
+        return eliminate(n, k, friends, 0);
     }
 };
-
-// class Solution {
-// public:
-//     int minOperations(vector<string> &logs) {
-//         int lvl = 0;
-//         for (string s : logs) {
-//             if (s[0] == '.') {
-//                 if (s[1] == '.' && lvl > 0) lvl--;
-//                 else continue;
-//             } else lvl++;
-//         }
-//         return lvl;
-//     }
-// };
