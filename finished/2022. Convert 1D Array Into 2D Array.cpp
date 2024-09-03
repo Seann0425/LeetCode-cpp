@@ -47,15 +47,32 @@ public:
 class Solution {
 public:
     vector<vector<int>> construct2DArray(vector<int> &original, int m, int n) {
-        vector<vector<int>> res;
-        if (m * n != original.size()) return res;
-        int idx = 0;
-        res.resize(m, vector<int>(n));
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                res[i][j] = original[idx++];
+        auto row = static_cast<size_t>(m), col = static_cast<size_t>(n);
+        if (row * col != original.size()) return {};
+        vector<vector<int>> res(row, vector<int>(col));
+        size_t k = 0;
+        for (size_t i = 0; i < row; i++) {
+            for (size_t j = 0; j < col; j++) {
+                res[i][j] = original[k++];
             }
         }
+
         return res;
     }
 };
+
+// class Solution {
+// public:
+//     vector<vector<int>> construct2DArray(vector<int> &original, int m, int n) {
+//         vector<vector<int>> res;
+//         if (m * n != original.size()) return res;
+//         int idx = 0;
+//         res.resize(m, vector<int>(n));
+//         for (int i = 0; i < m; i++) {
+//             for (int j = 0; j < n; j++) {
+//                 res[i][j] = original[idx++];
+//             }
+//         }
+//         return res;
+//     }
+// };

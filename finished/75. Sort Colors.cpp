@@ -59,9 +59,9 @@ public:
         size_t zero_bound = 0, two_bound = N - 1;
         for (auto &i : nums)
             if (i == 0) swap(i, nums[zero_bound++]);
-        while (zero_bound <= two_bound) {
+        while (two_bound < N && zero_bound <= two_bound) {
             if (nums[zero_bound] == 2) swap(nums[zero_bound], nums[two_bound--]);
-            zero_bound++;
+            else zero_bound++;
         }
     }
 };
