@@ -52,6 +52,7 @@ public:
 //     return 0;
 // }();
 
+// dijkstra
 class Solution {
     typedef pair<double, size_t> Path;
 public:
@@ -85,5 +86,35 @@ public:
         }
 
         return probs[end_node];
+    }
+};
+
+// bellman-ford
+class Solution {
+public:
+    double maxProbability(int n, vector<vector<int>>& edges, vector<double>& succProb, int start_node, int end_node) {
+        const auto e = edges.size(), n_count = static_cast<size_t>(n);
+        vector<double> probability(n_count, 0.0);
+        probability[start_node] = 1.0;
+
+
+        for (size_t i = 0; i < n_count - 1; i++) {
+            auto updated = false;
+            for (size_t j = 0; j < e; j++) {
+                auto u = static_cast<size_t>(edges[j].front()), v = static_cast<size_t>(edges[j].back());
+                auto w = succProb[j];
+                if (probability[v] < probability[u] * w) {
+                    probability[v] = probability[u] * w;
+                    updated = true;
+                }
+                if (probability[u] < probability[v] * w) {
+                    probability[u] = probability[v] * w;
+                    updated = true;
+                }
+            }
+            if (!updated) break;
+        }
+
+        return probability[end_node];
     }
 };
