@@ -45,15 +45,14 @@ public:
 /*the solution should start from below*/
 
 class Solution {
-    int strToNum(string s) {
+    int str2Num(const string &s) {
         int res = 0;
-        for (char c : s) {
-            int cur = (c - 'a') + 1;
-            res += cur % 10 + cur / 10;
+        for (const auto &c : s) {
+            int pos = (c - 'a') + 1;
+            res += pos % 10 + pos / 10;
         }
         return res;
     }
-
     int digitSum(int n) {
         int res = 0;
         while (n > 0) {
@@ -64,10 +63,8 @@ class Solution {
     }
 public:
     int getLucky(string s, int k) {
-        int init = strToNum(s);
-        cout << init << endl;
-        for (int i = 1; i < k; i++)
-            init = digitSum(init);
-        return init;
+        int num = str2Num(s);
+        while (--k) num = digitSum(num);
+        return num;
     }
 };
