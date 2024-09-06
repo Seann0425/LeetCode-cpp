@@ -55,6 +55,28 @@ public:
 class Solution {
 public:
     ListNode* modifiedList(vector<int>& nums, ListNode* head) {
+        bitset<100005> check_nums;
+        for (const auto &num : nums) check_nums.set(static_cast<size_t>(num));
+
+        ListNode root(0, head);
+        ListNode* cur = &root, *remove;
+        while (cur->next) {
+            if (!check_nums.test(static_cast<size_t>(cur->next->val))) {
+                cur = cur->next;
+                continue;
+            }
+            remove = cur->next;
+            cur->next = remove->next;
+            delete remove;
+        }
+        
+        return root.next;
+    }
+};
+
+class Solution {
+public:
+    ListNode* modifiedList(vector<int>& nums, ListNode* head) {
         unordered_set<int> check_nums;
         for (const auto &num : nums) check_nums.insert(num);
 
