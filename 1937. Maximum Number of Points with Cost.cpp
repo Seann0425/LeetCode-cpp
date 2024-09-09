@@ -51,26 +51,3 @@ public:
 //     cout.tie(0);
 //     return 0;
 // }();
-
-// inspired by PinkNekoFist
-class Solution {
-public:
-    vector<vector<int>> spiralMatrix(int m, int n, ListNode* head) {
-        const auto row = static_cast<size_t>(m), col = static_cast<size_t>(n);
-        vector<vector<int>> mat(row, vector<int>(col, -1));
-        array<int, 5> direct{0, 1, 0, -1, 0};
-        size_t i = 0, j = 0, face = 0;
-
-        while (head) {
-            mat[i][j] = head->val;
-            head = head->next;
-
-            auto new_i = i + direct[face], new_j = j + direct[face + 1];
-            if (new_i >= row or new_j >= col or mat[new_i][new_j] != -1) ++face %= 4;
-            i += direct[face];
-            j += direct[face + 1];
-        }
-
-        return mat;
-    }
-};
