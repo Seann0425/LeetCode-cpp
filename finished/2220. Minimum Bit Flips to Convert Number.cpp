@@ -46,13 +46,20 @@ public:
 
 class Solution {
 public:
-    int minBitFlips(int start, int goal) {
-        unsigned cnt = start ^ goal;
-        cnt = (cnt & 0x55555555) + ((cnt & 0xaaaaaaaa) >> 1);
-        cnt = (cnt & 0x33333333) + ((cnt & 0xcccccccc) >> 2);
-        cnt = (cnt & 0x0f0f0f0f) + ((cnt & 0xf0f0f0f0) >> 4);
-        cnt = (cnt & 0x00ff00ff) + ((cnt & 0xff00ff00) >> 8);
-        cnt = (cnt & 0x0000ffff) + ((cnt & 0xffff0000) >> 16);
-        return cnt;
+    int minBitFlips(unsigned start, unsigned goal) {
+        return popcount(start ^ goal);
     }
 };
+
+// class Solution {
+// public:
+//     int minBitFlips(int start, int goal) {
+//         unsigned cnt = start ^ goal;
+//         cnt = (cnt & 0x55555555) + ((cnt & 0xaaaaaaaa) >> 1);
+//         cnt = (cnt & 0x33333333) + ((cnt & 0xcccccccc) >> 2);
+//         cnt = (cnt & 0x0f0f0f0f) + ((cnt & 0xf0f0f0f0) >> 4);
+//         cnt = (cnt & 0x00ff00ff) + ((cnt & 0xff00ff00) >> 8);
+//         cnt = (cnt & 0x0000ffff) + ((cnt & 0xffff0000) >> 16);
+//         return cnt;
+//     }
+// };
