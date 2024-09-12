@@ -46,7 +46,40 @@ public:
 //     return 0;
 // }();
 
+constexpr size_t max_distance = 11;
+
 class Solution {
+    int ans;
+    size_t dist;
+    vector<int> dfs(TreeNode *node) {
+        if (!node) return {};
+        if (!node->left and !node->right) return {1};
+        vector<int> children_dist(max_distance);
+        vector<int> left(dfs(node->left)), right(dfs(node->right));
+        if (left.size() == 1) children_dist[1]++;
+        else if (left.size() == max_distance)
+            for (size_t i = 0; i < max_distance - 1; i++) children_dist[i + 1] += left[i];
+        if (right.size() == 1) children_dist[1]++;
+        else if (right.size() == max_distance)
+            for (size_t i = 0; i < max_distance - 1; i++) children_dist[i + 1] += right[i];
+        two_sum(children_dist);
+        return std::move(children_dist);
+    }
+    void two_sum(const vector<int> &children_dist) {
+        // to be optimized
+        for (size_t i = 1; i < max_distance - 2; i++) {
+            for (size_t j = i; j < max_distance - 2; j++) {
+                if (i + j > dist) continue;
+                ans += static_cast<int>(i == j ? children_dist[i] * (children_dist[i] - 1)
+                                               : children_dist[j] * children_dist[i]);
+            }
+        }
+    }
 public:
-    int countPairs(TreeNode *root, int distance) {}
+    int countPairs(TreeNode *root, int distance) {
+        dist = static_cast<size_t>(distance);
+        ans = 0;
+        dfs(root);
+        return ans;
+    }
 };
