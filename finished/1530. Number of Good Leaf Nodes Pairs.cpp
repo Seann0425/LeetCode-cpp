@@ -53,25 +53,25 @@ class Solution {
     size_t dist;
     vector<int> dfs(TreeNode *node) {
         if (!node) return {};
-        if (!node->left and !node->right) return {1};
+        if (!node->left and !node->right) return {0, 1};
         vector<int> children_dist(max_distance);
         vector<int> left(dfs(node->left)), right(dfs(node->right));
-        if (left.size() == 1) children_dist[1]++;
-        else if (left.size() == max_distance)
-            for (size_t i = 0; i < max_distance - 1; i++) children_dist[i + 1] += left[i];
-        if (right.size() == 1) children_dist[1]++;
-        else if (right.size() == max_distance)
-            for (size_t i = 0; i < max_distance - 1; i++) children_dist[i + 1] += right[i];
-        two_sum(children_dist);
+        if (left.size() == 1) left.resize(max_distance, 0);
+        if (right.size() == 1) right.resize(max_distance, 0);
+        for (size_t i = max_distance - 1; i > 0; i--) {
+            left[i] = left[i - 1];
+            right[i] = right[i - 1];
+        }
+        two_sum(left, right);
+        for (size_t i = 1; i < max_distance; i++) children_dist[i] = left[i] + right[i];
         return std::move(children_dist);
     }
-    void two_sum(const vector<int> &children_dist) {
+    void two_sum(const vector<int> &left, const vector<int> &right) {
         // to be optimized
-        for (size_t i = 1; i < max_distance - 2; i++) {
-            for (size_t j = i; j < max_distance - 2; j++) {
-                if (i + j > dist) continue;
-                ans += static_cast<int>(i == j ? children_dist[i] * (children_dist[i] - 1)
-                                               : children_dist[j] * children_dist[i]);
+        for (size_t i = 1; i < max_distance; i++) {
+            for (size_t j = 1; j < max_distance; j++) {
+                if (i + j > dist) break;
+                ans += left[i] * right[i];
             }
         }
     }
