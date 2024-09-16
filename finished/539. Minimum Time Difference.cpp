@@ -58,6 +58,6 @@ public:
         sort(time.begin(), time.end());
         int ans = numeric_limits<int>::max();
         for (size_t i = 1; i < n; i++) ans = min(ans, time[i] - time[i - 1]);
-        return ans;
+        return min(ans, time.front() + 60 * 24 - time.back());
     }
 };
