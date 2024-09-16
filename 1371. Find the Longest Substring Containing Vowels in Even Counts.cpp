@@ -62,9 +62,5 @@ public:
         }
         for (auto &v : is_vowels)
             for (size_t i = 1; i < n; i++) v[i] = (v[i] != v[i - 1]);
-
-        for (size_t v = 1; v < 5; v++)
-            for (size_t i = 0; i < n; i++)
-                is_vowels[v][i] = (is_vowels[v - 1][i] or is_vowels[v][i]);
     }
 };
