@@ -47,20 +47,31 @@ public:
 // }();
 
 class Solution {
+    array<char, 5> vowels{'a', 'e', 'i', 'o', 'u'};
 public:
     int findTheLongestSubstring(string s) {
         const auto n = s.size();
-        vector<vector<bool>> is_vowels(5, vector<bool>(n));
-        array<char, 5> vowels{'a', 'e', 'i', 'o', 'u'};
+        vector<vector<bool>> is_vowels(5, vector<bool>(n, false));
+        vector<int> combinition(n, 0);
 
         for (size_t i = 0; i < n; i++) {
-            for (size_t v = 0; v < 5; v++)
-                if (s[i] == vowels[v]) {
-                    is_vowels[v][i] = true;
-                    break;
-                }
+            for (size_t v = 0; v < 5; v++) {
+                if (s[i] == vowels[v]) is_vowels[v][i] = true;
+                if (i) is_vowels[v][i] = (is_vowels[v][i] != is_vowels[v][i - 1]);
+                if (is_vowels[v][i]) combinition[i] += (1 << v);
+            }
         }
-        for (auto &v : is_vowels)
-            for (size_t i = 1; i < n; i++) v[i] = (v[i] != v[i - 1]);
+
+        int ans = 0;
+        unordered_map<int, size_t> first_occur;
+        first_occur.emplace(0, numeric_limits<size_t>::max());
+        for (size_t i = 0; i < n; i++) {
+            if (!first_occur.count(combinition[i])) {
+                first_occur.emplace(combinition[i], i);
+                continue;
+            }
+            ans = max(ans, static_cast<int>(i - first_occur[combinition[i]]));
+        }
+        return ans;
     }
 };
