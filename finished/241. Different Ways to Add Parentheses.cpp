@@ -84,8 +84,7 @@ public:
         }
         nums.push_back(tmp);
 
-        const auto n = nums.size();
-        compute(0, n - 1, ans);
+        compute(0, nums.size() - 1, ans);
         return ans;
     }
 };
