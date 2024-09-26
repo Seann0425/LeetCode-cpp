@@ -49,12 +49,29 @@ public:
 class Solution {
 public:
     string shortestPalindrome(string s) {
+        if (s.empty()) return {};
         string str(s);
         reverse(s.begin(), s.end());
+        s.pop_back();
         s += str;
         const auto n = s.size();
-        vector<int> lps(n);
+        vector<size_t> lps(n);
 
         // build lps and find candidate
+        size_t i = 1, prev = 0;
+        size_t candidate = 0;
+        while (i < n) {
+            if (s[i] == s[prev]) {
+                lps[i] = prev++ + 1;
+                if ((lps[i] == n - i - 1 or lps[i] == n - i - 2) and i - lps[i] + 1 <= n / 2)
+                    candidate = i;
+                i++;
+            } else if (!prev) {
+                lps[i] = 0;
+                i++;
+            } else prev = lps[prev - 1];
         }
+        auto ans = candidate - lps[candidate] + 1;
+        return s.substr(candidate ? ans : 0);
+    }
 };
