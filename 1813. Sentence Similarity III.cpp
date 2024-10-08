@@ -56,6 +56,8 @@ public:
         // then use two pointers to make sure that we can completely run through sentence2
         size_t l = 0, r = n2 - 1;
         while (l < n2 && sentence1[l] == sentence2[l]) l++;
-        if
+        if (l == n2) return true;
+        while (r >= l && sentence1[r + n1 - n2] == sentence2[r]) r--;
+        return r < l;
     }
 };
