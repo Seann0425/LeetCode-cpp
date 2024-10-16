@@ -50,15 +50,25 @@ class Solution {
 public:
     string longestDiverseString(int a, int b, int c) {
         string ans{};
-        priority_queue<pair<int, char>> pq;
-        if (a) pq.emplace(a, 'a');
-        if (b) pq.emplace(b, 'b');
-        if (c) pq.emplace(c, 'c');
-        while (pq.size() > 1) {
-            auto [cnt1, ch1] = pq.top();
-            pq.pop();
-            auto [cnt2, ch2] = pq.top();
-            pq.pop();
-                }
+        priority_queue<pair<int, char>> freq;
+        if (a) freq.emplace(a, 'a');
+        if (b) freq.emplace(b, 'b');
+        if (c) freq.emplace(c, 'c');
+        while (!freq.empty()) {
+            auto [left, character] = freq.top();
+            freq.pop();
+            if (ans.size() >= 2 && ans.back() == character && ans[ans.size() - 2] == character) {
+                if (freq.empty()) break;
+                auto [left2, character2] = freq.top();
+                freq.pop();
+                ans.push_back(character2);
+                if (--left2) freq.emplace(left2, character2);
+                freq.emplace(left, character);
+            } else {
+                ans.push_back(character);
+                if (--left) freq.emplace(left, character);
+            }
+        }
+        return ans;
     }
 };
