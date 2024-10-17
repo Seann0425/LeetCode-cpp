@@ -48,5 +48,20 @@ public:
 
 class Solution {
 public:
-    vector<int> lexicalOrder(size_t n) { vector<int> lexical(n); }
+    vector<int> lexicalOrder(size_t n) {
+        const auto bound = static_cast<int>(n);
+        vector<int> lexical;
+        lexical.reserve(n);
+        auto current = 1;
+        while (lexical.size() < n) {
+            lexical.push_back(current);
+            if (current * 10 <= bound) current *= 10;
+            else if (current % 10 != 9 && current + 1 <= bound) current++;
+            else {
+                while ((current / 10) % 10 == 9) current /= 10;
+                current = current / 10 + 1;
+            }
+        }
+        return lexical;
+    }
 };
