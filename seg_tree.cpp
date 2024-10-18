@@ -9,13 +9,13 @@ public:
     vector<T> tree;
     const T DEFAULT = T{};
 
-    T merge(T a, T b) { return a + b; }
-
-    void init(size_t n) {
+    SegmentTree(size_t n) {
         size = 1;
         while (size < n) size *= 2; // perfect binary tree
         tree.resize(2 * size - 1, DEFAULT);
     }
+
+    T merge(T a, T b) { return a + b; }
 
     // build segment tree from source array
     void build(vector<T> &src, size_t idx, size_t left_close, size_t right_open) {
