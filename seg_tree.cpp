@@ -1,8 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// use indexed array
-// inspired from Pashka
+// Segment Tree without lazy tag
 template <typename T>
 class SegmentTree {
 public:
@@ -14,51 +13,67 @@ public:
 
     void init(size_t n) {
         size = 1;
-        while (size < n) size *= 2;
+        while (size < n) size *= 2; // perfect binary tree
         tree.resize(2 * size - 1, DEFAULT);
     }
 
-    // void build(vector<int> &a,ll x,ll lx,ll rx) {
-    //     //base case
-    //     if(rx-lx == 1) {
-    //         if(lx < int(a.size())) {
-    //             values[x] = single(a[lx]);
-    //         }
-    //         return;
-    //     }
-
-    //     ll m = (lx+rx)/2;
-    //     build(a,2*x +1,lx,m);
-    //     build(a,2*x +2,m,rx);
-    //     values[x] = merge(values[2*x +1],values[2*x +2]);
-    // }
-
-    // void build(vector<int> &a) {
-    //     build(a,0,0,size);
-    // }
-
-    void set(size_t idx, T val, size_t x, size_t lx, size_t rx) {
-        if (rx - lx == 1) {
-            tree[x] = val;
+    // build segment tree from source array
+    void build(vector<T> &src, size_t idx, size_t left_close, size_t right_open) {
+        // top down
+        if (right_open - left_close == 1) {
+            if (left < src.size()) tree[idx] = src[left_close];
             return;
         }
-        size_t m = (lx + rx) / 2;
-        if (idx < m) set(idx, val, 2 * x + 1, lx, m);
-        else set(idx, val, 2 * x + 2, m, rx);
-        tree[x] = merge(tree[2 * x + 1], tree[2 * x + 2]);
+
+        size_t mid = left_close + (right_open - left_close) / 2;
+        build(src, 2 * idx + 1, left_close, mid);
+        build(src, 2 * idx + 2, mid, right_open);
+        tree[idx] = merge(tree[2 * idx + 1], tree[2 * idx + 2]);
     }
 
-    void set(size_t idx, T val) { set(idx, val, 0, 0, size); }
+    void build(vector<T> &src) { build(src, 0, 0, size); }
 
-    T calc(size_t l, size_t r, size_t x, size_t lx, size_t rx) {
-        if (lx >= r or l >= rx) return DEFAULT;
-        if (lx >= l and rx <= r) return tree[x];
+    // set value at index
+    void set(size_t i_src, T val, size_t idx, size_t left_close, size_t right_open) {
+        if (right_open - left_close == 1) {
+            tree[idx] = val;
+            return;
+        }
 
-        size_t m = (lx + rx) / 2;
-        T s1 = calc(l, r, 2 * x + 1, lx, m);
-        T s2 = calc(l, r, 2 * x + 2, m, rx);
-        return merge(s1, s2);
+        size_t mid = left_close + (right_open - left_close) / 2;
+        if (i_src < mid) set(i_src, val, 2 * idx + 1, left_close, mid);
+        else set(i_src, val, 2 * idx + 2, mid, right_open);
+        tree[idx] = merge(tree[2 * idx + 1], tree[2 * idx + 2]);
     }
 
-    T query(size_t l, size_t r) { return calc(l, r + 1, 0, 0, size); }
+    void set(size_t i_src, T val) { set(i_src, val, 0, 0, size); }
+
+    // increment value at index
+    void increment(size_t i_src, T val, size_t idx, size_t left_close, size_t right_open) {
+        if (right_open - left_close == 1) {
+            tree[idx] += val;
+            return;
+        }
+
+        size_t mid = left_close + (right_open - left_close) / 2;
+        if (i_src < mid) increment(i_src, val, 2 * idx + 1, left_close, mid);
+        else increment(i_src, val, 2 * idx + 2, mid, right_open);
+        tree[idx] = merge(tree[2 * idx + 1], tree[2 * idx + 2]);
+    }
+
+    void increment(size_t i_src, T val) { increment(i_src, val, 0, 0, size); }
+
+    // query sum of range [left, right)
+    T count(size_t left, size_t right, size_t idx, size_t left_close, size_t right_open) {
+        if (left_close >= right or left >= right_open) return DEFAULT;
+        if (left_close >= left and right_open <= right) return tree[idx];
+
+        // not fully covered
+        size_t mid = left_close + (right_open - left_close) / 2;
+        T left_val = count(left, right, 2 * idx + 1, left_close, mid);
+        T right_val = count(left, right, 2 * idx + 2, mid, right_open);
+        return merge(left_val, right_val);
+    }
+
+    T count(size_t left, size_t right) { return count(left, right, 0, 0, size); }
 };
