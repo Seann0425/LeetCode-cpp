@@ -47,22 +47,28 @@ public:
 // }();
 
 class Solution {
+    auto count_successor(long long num, long long sib, long long &n) -> size_t {
+        auto count = 0uz;
+        while (num <= n) {
+            count += min(n + 1, sib) - num;
+            num *= 10;
+            sib *= 10;
+        }
+        return count;
+    }
 public:
-    vector<int> lexicalOrder(size_t n) {
-        // think of it as a trie and do a pre-order traversal
-        const auto bound = static_cast<int>(n);
-        vector<int> lexical;
-        lexical.reserve(n);
-        auto current = 1;
-        while (lexical.size() < n) {
-            lexical.push_back(current);
-            if (current * 10 <= bound) current *= 10;
-            else if (current % 10 != 9 && current + 1 <= bound) current++;
-            else {
-                while ((current / 10) % 10 == 9) current /= 10;
-                current = current / 10 + 1;
+    int findKthNumber(long long n, size_t k) {
+        long long num = 1;
+        for (size_t i = 1; i < k;) {
+            auto successors = count_successor(num, num + 1, n);
+            if (i + successors <= k) {
+                i += successors;
+                num++;
+            } else {
+                i++;
+                num *= 10;
             }
         }
-        return lexical;
+        return num;
     }
 };
