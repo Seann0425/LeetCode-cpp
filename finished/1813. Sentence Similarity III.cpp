@@ -49,15 +49,19 @@ public:
 class Solution {
 public:
     bool areSentencesSimilar(string sentence1, string sentence2) {
-        if (sentence1.size() < sentence2.size()) sentence1.swap(sentence2);
-        const auto n1 = sentence1.size(), n2 = sentence2.size();
-        // deal with the case where sentence2 is the prefix or suffix of sentence1
-        if (auto i = sentence1.find(sentence2); i == 0 || i == n1 - n2) return true;
-        // then use two pointers to make sure that we can completely run through sentence2
-        size_t l = 0, r = n2 - 1;
-        while (l < n2 && sentence1[l] == sentence2[l]) l++;
+        istringstream iss1(sentence1), iss2(sentence2);
+        vector<string> s1, s2;
+        string word;
+
+        while (iss1 >> word) s1.push_back(std::move(word));
+        while (iss2 >> word) s2.push_back(std::move(word));
+        if (s1.size() < s2.size()) swap(s1, s2);
+
+        const auto n1 = s1.size(), n2 = s2.size();
+        auto l = 0uz, r = n2 - 1;
+        while (l < n2 && s1[l] == s2[l]) l++;
         if (l == n2) return true;
-        while (r >= l && sentence1[r + n1 - n2] == sentence2[r]) r--;
-        return r < l;
+        while (r < n2 && r >= l && s1[r + n1 - n2] == s2[r]) r--;
+        return r >= n2 or r < l;
     }
 };
