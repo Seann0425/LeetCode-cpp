@@ -47,6 +47,27 @@ public:
 // }();
 
 class Solution {
+    int digit_count(int i) {
+        auto digit = 0;
+        for (; i; i /= 10) digit++;
+        return digit;
+    }
 public:
-    int longestCommonPrefix(vector<int> &arr1, vector<int> &arr2) {}
+    int longestCommonPrefix(vector<int> &arr1, vector<int> &arr2) {
+        unordered_set<int> prefix;
+        int ans{};
+        for (auto i : arr1)
+            for (; i; i /= 10) prefix.insert(i);
+        for (auto i : arr2) {
+            auto digit = digit_count(i);
+            for (; i; i /= 10) {
+                if (prefix.count(i)) {
+                    ans = max(ans, digit);
+                    break;
+                }
+                digit--;
+            }
+        }
+        return ans;
+    }
 };

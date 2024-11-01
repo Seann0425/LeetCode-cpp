@@ -49,15 +49,17 @@ public:
 class Solution {
 public:
     long long maxScore(vector<int> &nums) {
-        if (nums.size() == 1) return nums.front() * nums.front();
-        sort(nums.begin(), nums.end(), greater<>());
-        nums.pop_back();
-        auto factor = static_cast<long long>(nums.front());
-        auto mul = static_cast<long long>(nums.front());
-        for (const auto &i : nums) {
-            factor = gcd(factor, i);
-            mul = lcm(mul, i);
+        const auto n = nums.size();
+        auto ans = 0ll;
+        for (size_t exclude = n; exclude <= n; exclude--) {
+            auto cur_lcm = 1ll, cur_gcd = 0ll;
+            for (size_t i = 0; i < n; i++) {
+                if (i == exclude) continue;
+                cur_lcm = lcm(cur_lcm, nums[i]);
+                cur_gcd = gcd(cur_gcd, nums[i]);
+            }
+            ans = max(ans, cur_lcm * cur_gcd);
         }
-        return factor * mul;
+        return ans;
     }
 };
