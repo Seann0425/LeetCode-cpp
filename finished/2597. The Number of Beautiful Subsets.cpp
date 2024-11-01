@@ -38,37 +38,33 @@ public:
 
 /*the solution should start from below*/
 
+// #pragma GCC optimize("O3", "unroll-loops")
+// static const auto InitialOptimization = [](){
+//     ios_base::sync_with_stdio(false);
+//     cin.tie(0);
+//     cout.tie(0);
+//     return 0;
+// }();
+
 class Solution {
-public:
-    string makeFancyString(string s) {
-        string ans{};
-        char cntr = 0, prev = '@';
-        for (const auto &c : s) {
-            if (c == prev) {
-                if (cntr == 2) continue;
-                cntr++;
-            } else cntr = 1;
-            prev = c;
-            ans.push_back(c);
+    unordered_map<int, int> counter;
+    void backtrack(const vector<int> &nums, const int &k, int &ans, size_t idx, size_t size) {
+        if (idx == nums.size()) {
+            if (size) ans++;
+            return;
         }
+
+        if (!counter[nums[idx] + k] && !counter[nums[idx] - k]) {
+            counter[nums[idx]]++;
+            backtrack(nums, k, ans, idx + 1, size + 1);
+            counter[nums[idx]]--;
+        }
+        backtrack(nums, k, ans, idx + 1, size);
+    }
+public:
+    int beautifulSubsets(vector<int> &nums, int k) {
+        int ans{};
+        backtrack(nums, k, ans, 0uz, 0uz);
         return ans;
     }
 };
-
-// class Solution {
-// public:
-//     string makeFancyString(string s) {
-//         char pre = '@';
-//         int consCounter = 0;
-//         string ans = "";
-//         for (char c : s) {
-//             if (c != pre) ans.push_back(c), consCounter = 1;
-//             else {
-//                 consCounter++;
-//                 if (consCounter < 3) ans.push_back(c);
-//             }
-//             pre = c;
-//         }
-//         return ans;
-//     }
-// };

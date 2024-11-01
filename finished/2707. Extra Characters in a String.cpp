@@ -47,6 +47,26 @@ public:
 // }();
 
 class Solution {
+    unordered_map<string, int> dict;
+    unordered_map<size_t, int> memo;
+    int solve(string &s, size_t idx) {
+        if (idx == s.size()) return 0;
+        if (memo.find(idx) != memo.end()) return memo[idx];
+        int tail = numeric_limits<int>::max();
+        string tmp{};
+        for (size_t i = idx; i < s.size(); i++) {
+            tmp.push_back(s[i]);
+            // tmp is part of the partition
+            if (dict.find(tmp) != dict.end()) tail = min(tail, solve(s, i + 1));
+        }
+        // idx is one of the extra char
+        tail = min(tail, 1 + solve(s, idx + 1));
+        memo[idx] = tail;
+        return memo[idx];
+    }
 public:
-    int minExtraChar(string s, vector<string> &dictionary) {}
+    int minExtraChar(string s, vector<string> &dictionary) {
+        for (auto &word : dictionary) dict[std::move(word)]++;
+        return solve(s, 0uz);
+    }
 };
