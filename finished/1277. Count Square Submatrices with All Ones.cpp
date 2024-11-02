@@ -38,31 +38,36 @@ public:
 
 /*the solution should start from below*/
 
+// #pragma GCC optimize("O3", "unroll-loops")
+// static const auto InitialOptimization = [](){
+//     ios_base::sync_with_stdio(false);
+//     cin.tie(0);
+//     cout.tie(0);
+//     return 0;
+// }();
+
 class Solution {
 public:
-    bool isCircularSentence(string sentence) {
-        char prev = sentence.back();
-        stringstream ss(std::move(sentence));
-        string word{};
-        while (ss >> word) {
-            if (word.front() != prev) return false;
-            prev = word.back();
+    int countSquares(vector<vector<int>> &matrix) {
+        const auto m = matrix.size(), n = matrix.front().size();
+        vector<vector<int>> dp(m, vector<int>(n, 0));
+        auto ans = 0;
+        for (size_t i = 0; i < n; i++) {
+            dp.front()[i] = matrix.front()[i];
+            ans += dp.front()[i];
         }
-        return true;
+        for (size_t i = 0; i < m; i++) {
+            dp[i].front() = matrix[i].front();
+            ans += dp[i].front();
+        }
+        for (size_t i = 1; i < m; i++) {
+            for (size_t j = 1; j < n; j++) {
+                if (matrix[i][j]) {
+                    dp[i][j] = 1 + min({dp[i - 1][j], dp[i - 1][j - 1], dp[i][j - 1]});
+                    ans += dp[i][j];
+                }
+            }
+        }
+        return ans;
     }
 };
-
-// class Solution {
-// public:
-//     bool isCircularSentence(string sentence) {
-//         int n = sentence.size();
-
-//         if (sentence[0] != sentence[n - 1]) return false;
-
-//         for (int i = 0; i < n; i++) {
-//             if (sentence[i] == ' ' && sentence[i - 1] != sentence[i + 1]) return false;
-//         }
-
-//         return true;
-//     }
-// };
