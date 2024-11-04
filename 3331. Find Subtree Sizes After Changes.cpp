@@ -48,7 +48,5 @@ public:
 
 class Solution {
 public:
-    vector<int> findSubtreeSizes(vector<int> &parent, string s) {
-        // i think it's something to do with dsu
-    }
+    vector<int> findSubtreeSizes(vector<int> &parent, string s) {}
 };

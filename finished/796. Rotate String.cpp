@@ -41,39 +41,48 @@ public:
 class Solution {
 public:
     bool rotateString(string s, string goal) {
-        const auto n = s.size(), g = goal.size();
-        if (n != g) return false;
-        for (size_t i = 0; i < n; i++) {
-            if (s[i] == goal[0]) {
-                for (size_t j = 0; j < g; j++) {
-                    if (goal[j] != s[(i + j) % n]) goto failed;
-                }
-                return true;
-            }
-        failed:
-            continue;
-        }
+        if (goal.size() != s.size()) return false;
+        s += s;
+        return s.find(goal) != string::npos;
     }
 };
 
-class Solution {
-public:
-    bool rotateString(string s, string goal) {
-        ios_base::sync_with_stdio(0);
-        int n = s.size(), g = goal.size();
-        if (n != g) return false;
-        for (int i = 0; i < n; i++) {
-            if (s[i] == goal[0]) {
-                bool r = 1;
-                for (int j = 0; j < g; j++) {
-                    if (goal[j] != s[(i + j) % n]) {
-                        r = 0;
-                        break;
-                    }
-                }
-                if (r) return true;
-            }
-        }
-        return false;
-    }
-};
+// class Solution {
+// public:
+//     bool rotateString(string s, string goal) {
+//         const auto n = s.size(), g = goal.size();
+//         if (n != g) return false;
+//         for (size_t i = 0; i < n; i++) {
+//             if (s[i] == goal[0]) {
+//                 for (size_t j = 0; j < g; j++) {
+//                     if (goal[j] != s[(i + j) % n]) goto failed;
+//                 }
+//                 return true;
+//             }
+//         failed:
+//             continue;
+//         }
+//     }
+// };
+
+// class Solution {
+// public:
+//     bool rotateString(string s, string goal) {
+//         ios_base::sync_with_stdio(0);
+//         int n = s.size(), g = goal.size();
+//         if (n != g) return false;
+//         for (int i = 0; i < n; i++) {
+//             if (s[i] == goal[0]) {
+//                 bool r = 1;
+//                 for (int j = 0; j < g; j++) {
+//                     if (goal[j] != s[(i + j) % n]) {
+//                         r = 0;
+//                         break;
+//                     }
+//                 }
+//                 if (r) return true;
+//             }
+//         }
+//         return false;
+//     }
+// };
