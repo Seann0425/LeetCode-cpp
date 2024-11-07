@@ -46,7 +46,59 @@ public:
 //     return 0;
 // }();
 
-class Solution {
+class dsu_t {
 public:
-    int countSubIslands(vector<vector<int>> &grid1, vector<vector<int>> &grid2) {}
+    vector<int> parent;
+    vector<int> size;
+    explicit dsu_t(size_t n) : parent(n), size(n, 1) { iota(parent.begin(), parent.end(), 0); }
+    auto find_parent(int u) -> int {
+        if (parent[u] == u) return u;
+        return parent[u] = find_parent(parent[u]);
+    }
+    auto unite(int u, int v) -> void {
+        auto pu = find_parent(u), pv = find_parent(v);
+        if (pu == pv) return;
+        if (size[pu] < size[pv]) swap(pu, pv);
+        parent[pv] = pu;
+        size[pu] += size[pv];
+    }
+};
+
+class Solution {
+    size_t m, n;
+    using graph_t = vector<vector<int>>;
+    auto dfs(size_t i, size_t j, graph_t &sub_islands, dsu_t &dsu, int belong) -> bool {
+        // FIXME: should dfs all connected cell, and consider the case where sub_cell is 1 but
+        // original cell is 0
+        if (i >= m || j >= n || !sub_islands[i][j]) return true;
+        sub_islands[i][j] = 0;
+        if (dsu.find_parent(i * n + j) != belong) return false;
+        auto up_left =
+            dfs(i - 1, j, sub_islands, dsu, belong) && dfs(i, j - 1, sub_islands, dsu, belong);
+        auto down_right =
+            dfs(i + 1, j, sub_islands, dsu, belong) && dfs(i, j + 1, sub_islands, dsu, belong);
+        return up_left && down_right;
+    }
+public:
+    int countSubIslands(graph_t &islands, graph_t &sub_islands) {
+        m = islands.size();
+        n = islands[0].size();
+        dsu_t dsu(m * n);
+        for (size_t i = 0; i < m; i++) {
+            for (size_t j = 0; j < n; j++) {
+                if (!islands[i][j]) continue;
+                if (i && islands[i - 1][j]) dsu.unite(i * n + j, (i - 1) * n + j);
+                if (j && islands[i][j - 1]) dsu.unite(i * n + j, i * n + j - 1);
+            }
+        }
+        auto ans = 0;
+        for (size_t i = 0; i < m; i++) {
+            for (size_t j = 0; j < n; j++) {
+                if (!sub_islands[i][j]) continue;
+                auto belong = dsu.find_parent(i * n + j);
+                ans += dfs(i, j, sub_islands, dsu, belong);
+            }
+        }
+        return ans;
+    }
 };
