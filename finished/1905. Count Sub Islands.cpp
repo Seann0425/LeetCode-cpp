@@ -69,8 +69,6 @@ class Solution {
     using graph_t = vector<vector<int>>;
     auto dfs(size_t i, size_t j, graph_t &islands, graph_t &sub_islands, dsu_t &dsu,
              int belong) -> bool {
-        // FIXME: should dfs all connected cell, and consider the case where sub_cell is 1 but
-        // original cell is 0
         if (i >= m || j >= n || !sub_islands[i][j]) return true;
         auto illegal = !islands[i][j] && sub_islands[i][j];
         sub_islands[i][j] = 0;
