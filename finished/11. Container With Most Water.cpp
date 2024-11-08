@@ -4,24 +4,18 @@ using namespace std;
 struct ListNode {
     int val;
     ListNode *next;
-    ListNode() : val(0), next(nullptr) {
-    }
-    ListNode(int x) : val(x), next(nullptr) {
-    }
-    ListNode(int x, ListNode *next) : val(x), next(next) {
-    }
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
 struct TreeNode {
     int val;
     TreeNode *left;
     TreeNode *right;
-    TreeNode() : val(0), left(nullptr), right(nullptr) {
-    }
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {
-    }
-    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {
-    }
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
 class Node {
@@ -51,3 +45,16 @@ public:
 //     cout.tie(0);
 //     return 0;
 // }();
+
+class Solution {
+public:
+    int maxArea(vector<int> &height) {
+        auto ans = 0;
+        auto left = 0uz, right = height.size() - 1;
+        while (left < right) {
+            ans = max(ans, static_cast<int>(right - left) * min(height[left], height[right]));
+            height[left] < height[right] ? left++ : right--;
+        }
+        return ans;
+    }
+};
