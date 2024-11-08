@@ -67,17 +67,19 @@ public:
 class Solution {
     size_t m, n;
     using graph_t = vector<vector<int>>;
-    auto dfs(size_t i, size_t j, graph_t &sub_islands, dsu_t &dsu, int belong) -> bool {
+    auto dfs(size_t i, size_t j, graph_t &islands, graph_t &sub_islands, dsu_t &dsu,
+             int belong) -> bool {
         // FIXME: should dfs all connected cell, and consider the case where sub_cell is 1 but
         // original cell is 0
         if (i >= m || j >= n || !sub_islands[i][j]) return true;
+        auto illegal = !islands[i][j] && sub_islands[i][j];
         sub_islands[i][j] = 0;
-        if (dsu.find_parent(i * n + j) != belong) return false;
-        auto up_left =
-            dfs(i - 1, j, sub_islands, dsu, belong) && dfs(i, j - 1, sub_islands, dsu, belong);
-        auto down_right =
-            dfs(i + 1, j, sub_islands, dsu, belong) && dfs(i, j + 1, sub_islands, dsu, belong);
-        return up_left && down_right;
+        auto up = dfs(i - 1, j, islands, sub_islands, dsu, belong);
+        auto left = dfs(i, j - 1, islands, sub_islands, dsu, belong);
+        auto down = dfs(i + 1, j, islands, sub_islands, dsu, belong);
+        auto right = dfs(i, j + 1, islands, sub_islands, dsu, belong);
+        if (dsu.find_parent(i * n + j) != belong or illegal) return false;
+        return up && left && down && right;
     }
 public:
     int countSubIslands(graph_t &islands, graph_t &sub_islands) {
@@ -96,7 +98,7 @@ public:
             for (size_t j = 0; j < n; j++) {
                 if (!sub_islands[i][j]) continue;
                 auto belong = dsu.find_parent(i * n + j);
-                ans += dfs(i, j, sub_islands, dsu, belong);
+                ans += dfs(i, j, islands, sub_islands, dsu, belong);
             }
         }
         return ans;
