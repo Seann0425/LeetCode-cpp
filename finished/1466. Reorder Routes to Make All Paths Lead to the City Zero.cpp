@@ -47,6 +47,29 @@ public:
 // }();
 
 class Solution {
+    using Graph = vector<vector<pair<int, bool>>>; // {v, direc}
+    Graph undirected;
+    vector<bool> visited;
+    int ans = 0;
+    void dfs(size_t u) {
+        visited[u] = true;
+        for (const auto &[v, direc] : undirected[u]) {
+            if (visited[v]) continue;
+            ans += direc;
+            dfs(v);
+        }
+    }
 public:
-    int minReorder(int n, vector<vector<int>> &connections) {}
+    int minReorder(size_t n, vector<vector<int>> &connections) {
+        undirected.resize(n);
+        for (const auto &con : connections) {
+            auto u = con[0], v = con[1];
+            undirected[u].emplace_back(v, true);
+            undirected[v].emplace_back(u, false);
+        }
+
+        visited.resize(n, false);
+        dfs(0);
+        return ans;
+    }
 };
