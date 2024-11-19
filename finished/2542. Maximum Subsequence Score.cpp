@@ -45,3 +45,28 @@ public:
 //     cout.tie(0);
 //     return 0;
 // }();
+
+#include <ranges>
+class Solution {
+public:
+    long long maxScore(vector<int> &nums1, vector<int> &nums2, int k) {
+        const auto n = nums1.size();
+        vector<size_t> nums(n);
+        iota(nums.begin(), nums.end(), 0);
+        sort(nums.begin(), nums.end(), [&](auto &i, auto &j) { return nums2[i] > nums2[j]; });
+        auto ans = numeric_limits<long long>::min(), sum = 0ll; // sum of kth-greatest elements
+        priority_queue<int, vector<int>, greater<int>> kth_greatest;
+        for (const auto &i : nums | std::views::take(k - 1)) {
+            sum += nums1[i];
+            kth_greatest.push(nums1[i]);
+        }
+        for (const auto &i : nums | std::views::drop(k - 1)) {
+            sum += nums1[i];
+            kth_greatest.push(nums1[i]);
+            ans = max(ans, sum * nums2[i]);
+            sum -= kth_greatest.top();
+            kth_greatest.pop();
+        }
+        return ans;
+    }
+};
