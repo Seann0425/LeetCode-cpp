@@ -1,3 +1,1 @@
-# WARNING
-This project contains many poorly implemented solutions  
-Please avoid as soon as possible  
+This project mainly documents my personal approaches to solving problems. It may include many immature coding practices, so please consider them with discretion.
