@@ -49,11 +49,25 @@ public:
 class Solution {
 public:
     int lengthOfLIS(vector<int> &nums) {
-        const auto n = nums.size();
-        vector<int> dp(n, 1);
-        for (auto i = 1uz; i < n; i++)
-            for (auto j = 0uz; j < i; j++)
-                if (nums[j] < nums[i]) dp[i] = max(dp[i], dp[j] + 1);
-        return *max_element(dp.begin(), dp.end());
+        // O(nlogn)
+        vector<int> sub;
+        for (const auto &i : nums) {
+            auto it = lower_bound(sub.begin(), sub.end(), i);
+            if (it == sub.end()) sub.push_back(i);
+            else *it = i;
+        }
+        return static_cast<int>(sub.size());
     }
 };
+
+// class Solution {
+// public:
+//     int lengthOfLIS(vector<int> &nums) {
+//         const auto n = nums.size();
+//         vector<int> dp(n, 1);
+//         for (auto i = 1uz; i < n; i++)
+//             for (auto j = 0uz; j < i; j++)
+//                 if (nums[j] < nums[i]) dp[i] = max(dp[i], dp[j] + 1);
+//         return *max_element(dp.begin(), dp.end());
+//     }
+// };
