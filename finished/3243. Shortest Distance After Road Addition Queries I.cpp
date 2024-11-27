@@ -47,9 +47,40 @@ public:
 // }();
 
 class Solution {
+    vector<vector<size_t>> graph;
+    int bfs(size_t u, size_t v) {
+        graph[u].push_back(v);
+
+        const auto n = graph.size();
+        vector<bool> visited(n, false);
+        queue<size_t> q;
+        q.push(0uz);
+        visited[0] = true;
+        auto ans = 0;
+        while (!q.empty()) {
+            ans++;
+            for (size_t i = q.size(); i > 0; i--) {
+                const auto x = q.front();
+                q.pop();
+                for (const auto y : graph[x]) {
+                    if (visited[y]) continue;
+                    if (y == n - 1) return ans;
+                    visited[y] = true;
+                    q.push(y);
+                }
+            }
+        }
+        return -1;
+    }
 public:
     vector<int> shortestDistanceAfterQueries(size_t n, vector<vector<int>> &queries) {
+        graph.resize(n);
+        for (size_t i = 0; i < n - 1; i++) graph[i].push_back(i + 1);
+
         const auto m = queries.size();
-        vector<int> ans(m), dist(n);
+        vector<int> ans;
+        ans.reserve(m);
+        for (const auto &q : queries) ans.push_back(bfs(q[0], q[1]));
+        return ans;
     }
 };
