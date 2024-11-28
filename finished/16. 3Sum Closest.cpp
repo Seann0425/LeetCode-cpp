@@ -57,12 +57,10 @@ public:
             auto best_sum = nums[fixed] + nums[left] + nums[right];
             while (left < right) {
                 const auto sum = nums[fixed] + nums[left] + nums[right];
+                if (abs(sum - target) < abs(best_sum - target)) best_sum = sum;
                 if (sum == target) return target;
-                if (abs(sum - target) <= abs(best_sum - target)) {
-                    best_sum = sum;
-                    if (sum > target) right--;
-                    else left++;
-                } else break;
+                else if (sum < target) left++;
+                else right--;
             }
             if (abs(best_sum - target) < abs(closest - target)) closest = best_sum;
         }
