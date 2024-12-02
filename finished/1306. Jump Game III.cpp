@@ -38,16 +38,27 @@ public:
 
 /*the solution should start from below*/
 
+// #pragma GCC optimize("O3", "unroll-loops")
+// static const auto InitialOptimization = [](){
+//     ios_base::sync_with_stdio(false);
+//     cin.tie(0);
+//     cout.tie(0);
+//     return 0;
+// }();
+
 class Solution {
+    vector<bool> visited;
+    size_t n;
+    auto dfs(size_t i, vector<int> &arr) {
+        if (i >= n or visited[i]) return false;
+        if (!arr[i]) return true;
+        visited[i] = true;
+        return dfs(i - arr[i], arr) or dfs(i + arr[i], arr);
+    }
 public:
-    int isPrefixOfWord(string sentence, string searchWord) {
-        istringstream ss(sentence);
-        string word;
-        auto index = 1;
-        while (ss >> word) {
-            if (word.starts_with(searchWord)) return index;
-            index++;
-        }
-        return -1;
+    bool canReach(vector<int> &arr, int start) {
+        n = arr.size();
+        visited.resize(n, false);
+        return dfs(static_cast<size_t>(start), arr);
     }
 };

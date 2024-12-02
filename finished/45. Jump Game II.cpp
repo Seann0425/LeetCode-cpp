@@ -4,24 +4,18 @@ using namespace std;
 struct ListNode {
     int val;
     ListNode *next;
-    ListNode() : val(0), next(nullptr) {
-    }
-    ListNode(int x) : val(x), next(nullptr) {
-    }
-    ListNode(int x, ListNode *next) : val(x), next(next) {
-    }
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
 struct TreeNode {
     int val;
     TreeNode *left;
     TreeNode *right;
-    TreeNode() : val(0), left(nullptr), right(nullptr) {
-    }
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {
-    }
-    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {
-    }
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
 class Node {
@@ -47,16 +41,13 @@ public:
 class Solution {
 public:
     int jump(vector<int> &nums) {
-        const auto N = nums.size();
-        int ans = 0;
-        size_t furthest = 0, edge = 0;
-        for (size_t i = 0; i < N - 1; i++) {
-            furthest = max(furthest, static_cast<size_t>(nums[i]) + i);
-            if (furthest >= N - 1) return ++ans;
-            if (i == edge) {
-                edge = furthest;
-                ans++;
-            }
+        const auto n = nums.size();
+        auto range = 0uz, edge = 0uz;
+        auto ans = 0;
+        for (auto i = 0uz; i < n - 1; i++) {
+            range = max(range, i + static_cast<size_t>(nums[i]));
+            if (range >= n - 1) return ++ans;
+            if (i == edge) edge = range, ans++;
         }
         return 0;
     }

@@ -38,16 +38,33 @@ public:
 
 /*the solution should start from below*/
 
+// #pragma GCC optimize("O3", "unroll-loops")
+// static const auto InitialOptimization = [](){
+//     ios_base::sync_with_stdio(false);
+//     cin.tie(0);
+//     cout.tie(0);
+//     return 0;
+// }();
+
+#include <ranges>
 class Solution {
 public:
-    int isPrefixOfWord(string sentence, string searchWord) {
-        istringstream ss(sentence);
-        string word;
-        auto index = 1;
-        while (ss >> word) {
-            if (word.starts_with(searchWord)) return index;
-            index++;
+    vector<vector<int>> merge(vector<vector<int>> &intervals) {
+        if (intervals.size() == 1) return intervals;
+        sort(intervals.begin(), intervals.end(),
+             [](const auto &a, const auto &b) { return a.front() < b.front(); });
+        vector<vector<int>> ans;
+        auto start = intervals[0][0], end = intervals[0][1];
+        for (const auto &interval : intervals | views::drop(1)) {
+            const auto s = interval[0], e = interval[1];
+            if (s <= end) end = max(end, e);
+            else {
+                ans.push_back({start, end});
+                start = s;
+                end = e;
+            }
         }
-        return -1;
+        ans.push_back({start, end});
+        return ans;
     }
 };

@@ -38,16 +38,23 @@ public:
 
 /*the solution should start from below*/
 
+// #pragma GCC optimize("O3", "unroll-loops")
+// static const auto InitialOptimization = [](){
+//     ios_base::sync_with_stdio(false);
+//     cin.tie(0);
+//     cout.tie(0);
+//     return 0;
+// }();
+
 class Solution {
 public:
-    int isPrefixOfWord(string sentence, string searchWord) {
-        istringstream ss(sentence);
-        string word;
-        auto index = 1;
-        while (ss >> word) {
-            if (word.starts_with(searchWord)) return index;
-            index++;
+    bool canJump(vector<int> &nums) {
+        const auto n = nums.size();
+        auto range = 0uz;
+        for (auto i = 0uz; i < n; i++) {
+            if (range < i) return false;
+            range = max(range, i + static_cast<size_t>(nums[i]));
         }
-        return -1;
+        return true;
     }
 };

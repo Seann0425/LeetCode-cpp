@@ -38,16 +38,29 @@ public:
 
 /*the solution should start from below*/
 
+// #pragma GCC optimize("O3", "unroll-loops")
+// static const auto InitialOptimization = [](){
+//     ios_base::sync_with_stdio(false);
+//     cin.tie(0);
+//     cout.tie(0);
+//     return 0;
+// }();
+
 class Solution {
 public:
-    int isPrefixOfWord(string sentence, string searchWord) {
-        istringstream ss(sentence);
-        string word;
-        auto index = 1;
-        while (ss >> word) {
-            if (word.starts_with(searchWord)) return index;
-            index++;
+    int divide(long long dividend, long long divisor) {
+        if (dividend == divisor) return 1;
+        bool sign = (dividend < 0 != divisor < 0);
+        unsigned a = abs(dividend);
+        unsigned b = abs(divisor);
+        auto ans = 0u;
+        while (a >= b) {
+            auto quotient = 0;
+            while (a > (b << (quotient + 1))) quotient++;
+            ans += (1u << quotient);
+            a = a - (b << quotient);
         }
-        return -1;
+        if (ans == (1u << 31) && !sign) return numeric_limits<int>::max();
+        return sign ? -ans : ans;
     }
 };
