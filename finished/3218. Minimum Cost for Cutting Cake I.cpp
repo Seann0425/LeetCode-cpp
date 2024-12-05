@@ -46,25 +46,31 @@ public:
 //     return 0;
 // }();
 
-#include <ranges>
 class Solution {
 public:
-    bool canChange(string start, string target) {
-        // problem guarantees that the length of start and targer are the same
-        const auto n = start.size();
-        auto wait_src_L = 0, wait_dst_R = 0;
-        for (const auto &[src, dst] : views::zip(start, target)) {
-            if (src == 'R') {
-                if (wait_src_L) return false;
-                wait_dst_R++;
+    int minimumCost(size_t m, size_t n, vector<int> &h, vector<int> &v) {
+        auto hori_count = 1, vert_count = 1, ans = 0;
+        priority_queue<int> hori_edge(h.begin(), h.end());
+        priority_queue<int> vert_edge(v.begin(), v.end());
+        while (!hori_edge.empty() and !vert_edge.empty()) {
+            if (hori_edge.top() > vert_edge.top()) {
+                ans += hori_edge.top() * vert_count;
+                hori_edge.pop();
+                hori_count++;
+            } else {
+                ans += vert_edge.top() * hori_count;
+                vert_edge.pop();
+                vert_count++;
             }
-            if (dst == 'L') {
-                if (wait_dst_R) return false;
-                wait_src_L++;
-            }
-            if (src == 'L' and wait_src_L-- == 0) return false;
-            if (dst == 'R' and wait_dst_R-- == 0) return false;
         }
-        return !wait_src_L and !wait_dst_R;
+        while (!hori_edge.empty()) {
+            ans += hori_edge.top() * vert_count;
+            hori_edge.pop();
+        }
+        while (!vert_edge.empty()) {
+            ans += vert_edge.top() * hori_count;
+            vert_edge.pop();
+        }
+        return ans;
     }
 };
