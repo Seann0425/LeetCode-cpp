@@ -59,7 +59,7 @@ public:
                 max_value = max(max_value, end_time.top().second);
                 end_time.pop();
             }
-            ans = max({ans, max_value + event[2], event[2]});
+            ans = max(ans, max_value + event[2]);
             end_time.emplace(event[1], event[2]);
         }
         return ans;
