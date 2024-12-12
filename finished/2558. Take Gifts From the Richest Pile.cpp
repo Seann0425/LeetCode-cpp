@@ -4,24 +4,18 @@ using namespace std;
 struct ListNode {
     int val;
     ListNode *next;
-    ListNode() : val(0), next(nullptr) {
-    }
-    ListNode(int x) : val(x), next(nullptr) {
-    }
-    ListNode(int x, ListNode *next) : val(x), next(next) {
-    }
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
 struct TreeNode {
     int val;
     TreeNode *left;
     TreeNode *right;
-    TreeNode() : val(0), left(nullptr), right(nullptr) {
-    }
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {
-    }
-    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {
-    }
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
 class Node {
@@ -47,18 +41,13 @@ public:
 class Solution {
 public:
     long long pickGifts(vector<int> &gifts, int k) {
-        priority_queue<int, vector<int>> pq;
-        for (const auto &i : gifts)
-            pq.push(i);
+        priority_queue<int> pq(gifts.begin(), gifts.end());
+        auto sum = accumulate(gifts.begin(), gifts.end(), 0ll);
         while (k--) {
-            int top = pq.top();
+            auto top = sqrt(pq.top());
+            sum -= pq.top() - top;
             pq.pop();
-            pq.push(sqrt(top));
-        }
-        long long sum = 0;
-        while (!pq.empty()) {
-            sum += pq.top();
-            pq.pop();
+            pq.push(top);
         }
         return sum;
     }
