@@ -47,8 +47,27 @@ public:
 // }();
 
 class Solution {
+    using weighted_class = tuple<double, int, int>; // weight, passed, total
 public:
-    int numberOfChild(int n, int k) {
-        return abs((k % ((n - 1) * 2)) - ((n - 1) * 2 * ((k % ((n - 1) * 2)) > (n - 1))));
+    double maxAverageRatio(vector<vector<int>> &classes, int extra_students) {
+        const auto n = classes.size();
+        auto ans = 0.0;
+        priority_queue<weighted_class> pq;
+        for (const auto &c : classes) {
+            auto weight = static_cast<double>(c[1] - c[0]) / c[1] / (c[1] + 1);
+            pq.emplace(weight, c[0], c[1]);
+        }
+        while (extra_students--) {
+            auto [weight, passed, total] = pq.top();
+            pq.pop();
+            weight = static_cast<double>(total - passed) / (total + 1) / (total + 2);
+            pq.emplace(weight, passed + 1, total + 1);
+        }
+        while (!pq.empty()) {
+            auto [weight, passed, total] = pq.top();
+            pq.pop();
+            ans += static_cast<double>(passed) / total;
+        }
+        return ans / n;
     }
 };
