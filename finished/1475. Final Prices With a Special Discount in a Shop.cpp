@@ -4,24 +4,18 @@ using namespace std;
 struct ListNode {
     int val;
     ListNode *next;
-    ListNode() : val(0), next(nullptr) {
-    }
-    ListNode(int x) : val(x), next(nullptr) {
-    }
-    ListNode(int x, ListNode *next) : val(x), next(next) {
-    }
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
 struct TreeNode {
     int val;
     TreeNode *left;
     TreeNode *right;
-    TreeNode() : val(0), left(nullptr), right(nullptr) {
-    }
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {
-    }
-    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {
-    }
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
 class Node {
@@ -47,16 +41,15 @@ public:
 class Solution {
 public:
     vector<int> finalPrices(vector<int> &prices) {
-        int n = prices.size();
-        for (int i = 0; i < n; i++) {
-            int discount = 0;
-            for (int j = i + 1; j < n; j++) {
-                if (prices[j] <= prices[i]) {
-                    discount = prices[j];
-                    break;
-                }
-            }
-            prices[i] -= discount;
+        const auto n = prices.size();
+        stack<int> monotonic;
+        for (size_t i = n - 1; i < n; i--) {
+            while (!monotonic.empty() && prices[i] < monotonic.top()) monotonic.pop();
+            if (!monotonic.empty()) {
+                auto top = monotonic.top();
+                monotonic.push(prices[i]);
+                prices[i] -= top;
+            } else monotonic.push(prices[i]);
         }
         return prices;
     }
