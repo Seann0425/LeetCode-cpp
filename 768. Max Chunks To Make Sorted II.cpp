@@ -50,14 +50,12 @@ class Solution {
 public:
     int maxChunksToSorted(vector<int> &arr) {
         const auto n = arr.size();
-        auto ans = 0, maximum = -1;
-        for (auto i = 0uz; i < n; i++) {
-            if (maximum < arr[i]) maximum = arr[i];
-            if (maximum == i) {
-                ans++;
-                maximum = -1;
-            }
-        }
+        auto ans = 0, maximum = numeric_limits<int>::min(), minimum = numeric_limits<int>::max();
+        vector<int> left_max(n), right_min(n);
+        for (auto i = 0; i < n; i++) left_max[i] = maximum = max(maximum, arr[i]);
+        for (auto i = n - 1; i < n; i--) right_min[i] = minimum = min(minimum, arr[i]);
+        for (auto i = 0uz; i < n; i++)
+            if (i == n - 1 or left_max[i] <= right_min[i + 1]) ans++;
         return ans;
     }
 };
